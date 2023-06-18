@@ -17,6 +17,8 @@ import java.net.URL;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class Exam extends GLCanvas implements GLEventListener, KeyListener, MouseListener {
@@ -47,11 +49,17 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
     private int randomBack;
     private int randomTop;
     private int randomTopTwo;
+    private int randomTopThree;
     private int randomRight;
     private int randomLeft;
     private int randomLeftTwo;
     private int randomBottom;
     private int randomBottomTwo;
+
+    private int[] randomAngleOne;
+
+    private int[] randomAngleTwo;
+    private int[] randomAngleThree;
 
 
     private int nameID = 0; // name ID for picking
@@ -62,6 +70,7 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
     private int right_idn = 0;
     private int top_idn = 0;
     private int top_two_idn = 0;
+    private int top_three_idn = 0;
     private int bottom_idn = 0;
     private int bottom_two_idn = 0;
     private int front_idn = 0;
@@ -77,14 +86,6 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
     private float defaultGreen = 0.5f;
     private float defaultBlue = 0.5f;
 
-    private float redL = defaultRed;
-    private float greenL = defaultGreen;
-    private float blueL = defaultBlue;
-
-    private float redLeftTwo = defaultRed;
-    private float greenLeftTwo = defaultGreen;
-    private float blueLeftTwo = defaultBlue;
-
     private float redT = defaultRed;
     private float greenT = defaultGreen;
     private float blueT = defaultBlue;
@@ -92,6 +93,10 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
     private float redTopTwo = defaultRed;
     private float greenTopTwo = defaultGreen;
     private float blueTopTwo = defaultBlue;
+
+    private float redTopThree = defaultRed;
+    private float greenTopThree = defaultGreen;
+    private float blueTopThree = defaultBlue;
 
     private float redB = defaultRed;
     private float greenB = defaultGreen;
@@ -140,6 +145,10 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
     private double topTwoY;
     private double topTwoZ;
 
+    private double topThreeX;
+    private double topThreeY;
+    private double topThreeZ;
+
     // BOTTOM
     private double bottomX;
     private double bottomY;
@@ -172,6 +181,7 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
     private float scaleRight = 0.5f;
     private float scaleTop = 0.5f;
     private float scaleTopTwo = 0.5f;
+    private float scaleTopThree = 0.5f;
     private float scaleBottom = 0.5f;
     private float scaleBottomTwo = 0.5f;
     private float scaleFront = 0.5f;
@@ -190,13 +200,17 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
     private int angleRightY = 90;
     private int angleRightZ = 90;
 
-    private int angleTopX = 90;
-    private int angleTopY = 90;
-    private int angleTopZ = 90;
+    private int angleTopX = 0;
+    private int angleTopY = 0;
+    private int angleTopZ = 0;
 
-    private int angleTopTwoX = 90;
-    private int angleTopTwoY = 90;
-    private int angleTopTwoZ = 90;
+    private int angleTopTwoX = 0;
+    private int angleTopTwoY = 0;
+    private int angleTopTwoZ = 0;
+
+    private int angleTopThreeX = 0;
+    private int angleTopThreeY = 0;
+    private int angleTopThreeZ = 0;
 
     private int angleBottomX = 90;
     private int angleBottomY = 90;
@@ -222,45 +236,32 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
     private float paletteGreen = 0.20f;
     private float paletteBlue = 0.92f;
 
-    private static final int LEFT_ID = 1;
-    private static final int LEFT_TWO_ID = 2;
-    private static final int RIGHT_ID = 3;
-    private static final int TOP_ID = 4;
-    private static final int TOP_TWO_ID = 5;
-    private static final int BOTTOM_ID = 6;
-    private static final int BOTTOM_TWO_ID = 7;
-    private static final int FRONT_ID = 8;
-    private static final int BACK_ID = 9;
-
+    private static final int TOP_ID = 1;
+    private static final int TOP_TWO_ID = 2;
+    private static final int TOP_THREE_ID = 3;
 
     // blueprint shapes
     private final static int
-            SPHERE = 1,
-            CYLINDER = 2,
-            CONE = 3,
-            CUBE = 4,
-            CUBOID = 5,
-            TETRAHEDRON = 6,
-            RECTANGULAR_PYRAMID = 7,
-            PENTAGON_PYRAMID = 8,
-            HEXAGON_PYRAMID = 9;
+            MOUSE = 1,
+            CHEESE = 2,
+            MOUSE_TRAP = 3
+    ;
 
 
     // palette shapes
-    private final static int SPHERE_ID = 10;
-    private final static int CUBOID_ID = 11;
-    private final static int CYLINDER_ID = 12;
-    private final static int CUBE_ID = 13;
-    private final static int TETRAHEDRON_ID = 14;
-    private final static int CONE_ID = 15;
-    private final static int RECTANGULAR_PYRAMID_ID = 16;
-    private final static int PENTAGON_PYRAMID_ID = 17;
-    private final static int HEXAGON_PYRAMID_ID = 18;
-
-    private final static String[] shape = {" ", "SPHERE", "CYLINDER", "CONE", "CUBE", "CUBOID", "TETRAHEDRON",
-            "RECTANGULAR_PYRAMID", "PENTAGON_PYRAMID", "HEXAGON_PYRAMID",
-            "SPHERE", "CUBOID", "CYLINDER", "CUBE", "TETRAHEDRON", "CONE",
-            "RECTANGULAR_PYRAMID", "PENTAGON_PYRAMID", "HEXAGON_PYRAMID"};
+    private final static int MOUSE_ID = 10;
+    private final static int CHEESE_ID = 11;
+    private final static int MOUSE_TRAP_ID = 12;
+    private final static Map<Integer,String> shape = new HashMap<Integer,String>(){
+        {
+            put(MOUSE, "MOUSE");
+            put(MOUSE_ID, "MOUSE");
+            put(CHEESE, "CHEESE");
+            put(CHEESE_ID, "CHEESE");
+            put(MOUSE_TRAP, "MOUSE_TRAP");
+            put(MOUSE_TRAP_ID, "MOUSE_TRAP");
+        }
+    };
 
     private GLCanvas canvas;
     private FPSAnimator animator;
@@ -278,16 +279,21 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
     private int xCursor, yCursor;
 
     private String[] textureFileNames = {
-            "disney4.jpg",
+            "wood3.png",
             "wood3.png",
             "mickeyframe.png",
             "background.jpg"
     };
     private Texture[] textures = new Texture[textureFileNames.length];
 
-    private int currentAngleOfRotationX = 0;
-    private int currentAngleOfRotationY = 0;
-    private int currentAngleOfVisibleField = 55;
+    private int baseAngleOfRotationX = 429;
+    private int baseAngleOfRotationY = 293;
+    private int baseAngleOfVisibleField = 55;
+
+
+    private int currentAngleOfRotationX = baseAngleOfRotationX;
+    private int currentAngleOfRotationY = baseAngleOfRotationY;
+    private int currentAngleOfVisibleField = baseAngleOfVisibleField;
 
     private int angleDelta = 5;
     private float aspect;
@@ -305,6 +311,7 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
     private float scaleRightShape;
     private float scaleTopShape;
     private float scaleTopTwoShape;
+    private float scaleTopThreeShape;
     private float scaleBottomShape;
     private float scaleBottomTwoShape;
     private float scaleFrontShape;
@@ -388,23 +395,11 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
             addButton.addActionListener(e -> {
                 if (e.getSource() == addButton) {
                     if (travers == 1) {
-                        left_idn = nameID;
-                    } else if (travers == 2) {
-                        left_two_idn = nameID;
-                    } else if (travers == 3) {
-                        right_idn = nameID;
-                    } else if (travers == 4) {
                         top_idn = nameID;
-                    } else if (travers == 5) {
+                    } else if (travers == 2) {
                         top_two_idn = nameID;
-                    } else if (travers == 6) {
-                        bottom_idn = nameID;
-                    } else if (travers == 7) {
-                        bottom_two_idn = nameID;
-                    } else if (travers == 8) {
-                        front_idn = nameID;
-                    } else if (travers == 9) {
-                        back_idn = nameID;
+                    } else if (travers == 3) {
+                        top_three_idn = nameID;
                     }
                 }
                 addButton.setFocusable(false);
@@ -412,26 +407,13 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
 
             removeButton.addActionListener(e -> {
                 if (e.getSource() == removeButton) {
-
-                    if (travers == 1) {
-                        left_idn = nameID;
-                    } else if (travers == 2) {
-                        left_two_idn = 0;
-                    } else if (travers == 3) {
-                        right_idn = 0;
-                    } else if (travers == 4) {
+                     if (travers == 1) {
                         top_idn = 0;
-                    } else if (travers == 5) {
+                    } else if (travers == 2) {
                         top_two_idn = 0;
-                    } else if (travers == 6) {
-                        bottom_idn = 0;
-                    } else if (travers == 7) {
-                        bottom_two_idn = 0;
-                    } else if (travers == 8) {
-                        front_idn = 0;
-                    } else if (travers == 9) {
-                        back_idn = 0;
-                    }
+                    }else if (travers == 3) {
+                         top_three_idn = 0;
+                     }
                 }
                 removeButton.setFocusable(false);
             });
@@ -521,8 +503,8 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
             });
 
             camera = new Camera();
-            camera.lookAt(-5, 0, 3, 0, 0, 0, 0, 1, 0);
-            camera.setScale(15);
+            camera.lookAt(-5, 10, 3, 0, 10, 10, 10, 10, 0);
+            camera.setScale(100);
 
             frame.setTitle(TITLE);
             frame.pack();
@@ -603,7 +585,7 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
             drawBlueprint(drawable);
             drawBackground(drawable);
         }
-
+        camera.lookAt(10, -10, 5, 10, 10, 10, 10, 10, 10);
         camera.apply(gl);
         lights(gl);
 
@@ -685,28 +667,25 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
 
     public void newGame() {
         ArrayList<Integer> list = new ArrayList<>();
-        for (int i = 1; i < 10; i++) {
+        for (int i = 1; i < 4; i++) {
             list.add(i);
         }
 
         Collections.shuffle(list);
+        randomTop = list.get(0);
+        randomTopTwo = list.get(1);
+        randomTopThree = list.get(2);
 
-        randomFront = list.get(0);
-        randomBack = list.get(1);
-        randomTop = list.get(2);
-        randomTopTwo = list.get(3);
-        randomRight = list.get(4);
-        randomLeft = list.get(5);
-        randomLeftTwo = list.get(6);
-        randomBottom = list.get(7);
-        randomBottomTwo = list.get(8);
-
+        // angles
+        randomAngleOne = new int[]{0, ((int) (Math.random() * 72) * 5), 0};
+        randomAngleTwo = new int[]{0, ((int) (Math.random() * 72) * 5),0};
+        randomAngleThree = new int[]{0, ((int) (Math.random() * 72) * 5),0};
 
         // default values
 
-        currentAngleOfRotationX = 0;
-        currentAngleOfRotationY = 0;
-        currentAngleOfVisibleField = 55;
+        currentAngleOfRotationX = baseAngleOfRotationX;
+        currentAngleOfRotationY = baseAngleOfRotationY;
+        currentAngleOfVisibleField = baseAngleOfVisibleField;
 
         translateX = 0;
         translateY = 0;
@@ -720,6 +699,7 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
         right_idn = 0;
         top_idn = 0;
         top_two_idn = 0;
+        top_three_idn = 0;
         bottom_idn = 0;
         bottom_two_idn = 0;
         front_idn = 0;
@@ -728,13 +708,6 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
         addShapeGreen = 102 / 255f;
         addShapeBlue = 0f;
 
-        redL = defaultRed;
-        greenL = defaultGreen;
-        blueL = defaultBlue;
-
-        redLeftTwo = defaultRed;
-        greenLeftTwo = defaultGreen;
-        blueLeftTwo = defaultBlue;
 
         redT = defaultRed;
         greenT = defaultGreen;
@@ -743,6 +716,10 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
         redTopTwo = defaultRed;
         greenTopTwo = defaultGreen;
         blueTopTwo = defaultBlue;
+
+        redTopThree = defaultRed;
+        greenTopThree = defaultGreen;
+        blueTopThree = defaultBlue;
 
         redB = defaultRed;
         greenB = defaultGreen;
@@ -786,18 +763,25 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
         scaleRightShape = 0.75f;
 
         // TOP
-        topX = -0.5;
+        topX = -0.4;
         topY = 1.5;
         topZ = 0.5;
 
         scaleTopShape = 1;
 
         // TOP TWO
-        topTwoX = 0.5;
+        topTwoX = 0.4;
         topTwoY = 1.5;
-        topTwoZ = -0.5;
+        topTwoZ = -0.7;
 
         scaleTopTwoShape = 1;
+
+        // TOP Three
+        topThreeX = -0.4;
+        topThreeY = 1.5;
+        topThreeZ = -2f;
+
+        scaleTopThreeShape = 1;
 
         // BOTTOM
         bottomX = 1;
@@ -835,6 +819,7 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
         scaleRight = 0.5f;
         scaleTop = 0.5f;
         scaleTopTwo = 0.5f;
+        scaleTopThree = 0.5f;
         scaleBottom = 0.5f;
         scaleBottomTwo = 0.5f;
         scaleFront = 0.5f;
@@ -853,13 +838,17 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
         angleRightY = 90;
         angleRightZ = 90;
 
-        angleTopX = 90;
-        angleTopY = 90;
-        angleTopZ = 90;
+        angleTopX = 0;
+        angleTopY = 0;
+        angleTopZ = 0;
 
-        angleTopTwoX = 90;
-        angleTopTwoY = 90;
-        angleTopTwoZ = 90;
+        angleTopTwoX = 0;
+        angleTopTwoY = 0;
+        angleTopTwoZ = 0;
+
+        angleTopThreeX = 0;
+        angleTopThreeY = 0;
+        angleTopThreeZ = 0;
 
         angleBottomX = 90;
         angleBottomY = 90;
@@ -872,6 +861,10 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
         angleBackX = 90;
         angleBackY = 90;
         angleBackZ = 90;
+
+        System.out.println("Top Shape created - id " + randomTop + ", x = " + randomAngleOne[0] + ", y = " + randomAngleOne[1] + ", z = " + randomAngleOne[2] + ", scale = " + scaleTopShape);
+        System.out.println("Top Two Shape created - id  " + randomTopTwo + ", x = " + randomAngleTwo[0] + ", y = " + randomAngleTwo[1] + ", z = " + randomAngleTwo[2] + ", scale = " + scaleTopTwoShape);
+        System.out.println("Top Three Shape created - id  " + randomTopThree + ", x = " + randomAngleThree[0] + ", y = " + randomAngleThree[1] + ", z = " + randomAngleThree[2] + ", scale = " + scaleTopThreeShape);
     }
 
     private void startPicking(GLAutoDrawable drawable) {
@@ -994,85 +987,21 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
         }
     } // end of processHits()
 
-    public void addShape(GLAutoDrawable drawable, int nameID) {
+    public void addShape(GLAutoDrawable drawable, int nameID, int[] angles) {
         GL2 gl = drawable.getGL().getGL2();
         switch (nameID) {
-            case SPHERE_ID:
-                Shapes.uvSphere(gl);
+            case CHEESE_ID:
+                Shapes.cheese(gl, angles);
                 break;
-            case CUBOID_ID:
-                Shapes.cuboid(gl);
+            case MOUSE_ID:
+                Shapes.mouse(gl, angles);
                 break;
-            case CYLINDER_ID:
-                Shapes.uvCylinder(gl);
-                break;
-            case CUBE_ID:
-                Shapes.cube(gl);
-                break;
-            case TETRAHEDRON_ID:
-                Shapes.tetrahedron(gl);
-                break;
-            case CONE_ID:
-                Shapes.uvCone(gl);
-                break;
-            case RECTANGULAR_PYRAMID_ID:
-                Shapes.rectangularPyramid(gl);
-                break;
-            case PENTAGON_PYRAMID_ID:
-                Shapes.pentagonPyramid(gl);
-                break;
-            case HEXAGON_PYRAMID_ID:
-                Shapes.hexagonPyramid(gl);
+            case MOUSE_TRAP_ID:
+                Shapes.mouseTrap(gl, angles);
                 break;
         }
     }
 
-    private void addLeftShape(GLAutoDrawable drawable, int nameID) {
-
-        GL2 gl = drawable.getGL().getGL2();
-        gl.glPushMatrix();
-        gl.glColor3f(addShapeRed, addShapeGreen, addShapeBlue);
-        gl.glTranslated(leftX, leftY, leftZ);
-        gl.glScalef(scaleLeft, scaleLeft, scaleLeft);
-        gl.glRotatef(angleLeftZ, 0, 0, rotate);
-        gl.glRotatef(angleLeftY, 0, rotate, 0);
-        gl.glRotatef(angleLeftX, rotate, 0, 0);
-        gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
-        addShape(drawable, nameID);
-        gl.glPopMatrix();
-
-    }
-
-    private void addLeftTwoShape(GLAutoDrawable drawable, int nameID) {
-
-        GL2 gl = drawable.getGL().getGL2();
-        gl.glPushMatrix();
-        gl.glColor3f(addShapeRed, addShapeGreen, addShapeBlue);
-        gl.glTranslated(leftTwoX, leftTwoY, leftTwoZ);
-        gl.glScalef(scaleLeftTwo, scaleLeftTwo, scaleLeftTwo);
-        gl.glRotatef(angleLeftTwoZ, 0, 0, rotate);
-        gl.glRotatef(angleLeftTwoY, 0, rotate, 0);
-        gl.glRotatef(angleLeftTwoX, rotate, 0, 0);
-        gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
-        addShape(drawable, nameID);
-        gl.glPopMatrix();
-
-    }
-
-    private void addRightShape(GLAutoDrawable drawable, int nameID) {
-
-        GL2 gl = drawable.getGL().getGL2();
-        gl.glPushMatrix();
-        gl.glColor3f(addShapeRed, addShapeGreen, addShapeBlue);
-        gl.glTranslated(rightX, rightY, rightZ);
-        gl.glScalef(scaleRight, scaleRight, scaleRight);
-        gl.glRotatef(angleRightZ, 0, 0, rotate);
-        gl.glRotatef(angleRightY, 0, rotate, 0);
-        gl.glRotatef(angleRightX, rotate, 0, 0);
-        gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
-        addShape(drawable, nameID);
-        gl.glPopMatrix();
-    }
 
     private void addTopShape(GLAutoDrawable drawable, int nameID) {
 
@@ -1081,11 +1010,9 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
         gl.glColor3f(addShapeRed, addShapeGreen, addShapeBlue);
         gl.glTranslated(topX, topY, topZ);
         gl.glScalef(scaleTop, scaleTop, scaleTop);
-        gl.glRotatef(angleTopZ, 0, 0, rotate);
-        gl.glRotatef(angleTopY, 0, rotate, 0);
-        gl.glRotatef(angleTopX, rotate, 0, 0);
         gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
-        addShape(drawable, nameID);
+
+        addShape(drawable, nameID, new int[]{angleTopX, angleTopY, angleTopZ});
         gl.glPopMatrix();
     }
 
@@ -1096,71 +1023,22 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
         gl.glColor3f(addShapeRed, addShapeGreen, addShapeBlue);
         gl.glTranslated(topTwoX, topTwoY, topTwoZ);
         gl.glScalef(scaleTopTwo, scaleTopTwo, scaleTopTwo);
-        gl.glRotatef(angleTopTwoZ, 0, 0, rotate);
-        gl.glRotatef(angleTopTwoY, 0, rotate, 0);
-        gl.glRotatef(angleTopTwoX, rotate, 0, 0);
         gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
-        addShape(drawable, nameID);
+
+        addShape(drawable, nameID, new int[]{angleTopTwoX, angleTopTwoY, angleTopTwoZ});
         gl.glPopMatrix();
     }
 
-    private void addBottomShape(GLAutoDrawable drawable, int nameID) {
+    private void addTopThreeShape(GLAutoDrawable drawable, int nameID) {
 
         GL2 gl = drawable.getGL().getGL2();
         gl.glPushMatrix();
         gl.glColor3f(addShapeRed, addShapeGreen, addShapeBlue);
-        gl.glTranslated(bottomX, bottomY, bottomZ);
-        gl.glScalef(scaleBottom, scaleBottom, scaleBottom);
-        gl.glRotatef(angleBottomZ, 0, 0, rotate);
-        gl.glRotatef(angleBottomY, 0, rotate, 0);
-        gl.glRotatef(angleBottomX, rotate, 0, 0);
+        gl.glTranslated(topThreeX, topThreeY, topThreeZ);
+        gl.glScalef(scaleTopThree, scaleTopThree, scaleTopThree);
         gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
-        addShape(drawable, nameID);
-        gl.glPopMatrix();
-    }
 
-    private void addBottomTwoShape(GLAutoDrawable drawable, int nameID) {
-
-        GL2 gl = drawable.getGL().getGL2();
-        gl.glPushMatrix();
-        gl.glColor3f(addShapeRed, addShapeGreen, addShapeBlue);
-        gl.glTranslated(bottomTwoX, bottomTwoY, bottomTwoZ);
-        gl.glScalef(scaleBottomTwo, scaleBottomTwo, scaleBottomTwo);
-        gl.glRotatef(angleBottomTwoZ, 0, 0, rotate);
-        gl.glRotatef(angleBottomTwoY, 0, rotate, 0);
-        gl.glRotatef(angleBottomTwoX, rotate, 0, 0);
-        gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
-        addShape(drawable, nameID);
-        gl.glPopMatrix();
-    }
-
-    private void addFrontShape(GLAutoDrawable drawable, int nameID) {
-
-        GL2 gl = drawable.getGL().getGL2();
-        gl.glPushMatrix();
-        gl.glColor3f(addShapeRed, addShapeGreen, addShapeBlue);
-        gl.glTranslated(frontX, frontY, frontZ);
-        gl.glScalef(scaleFront, scaleFront, scaleFront);
-        gl.glRotatef(angleFrontZ, 0, 0, rotate);
-        gl.glRotatef(angleFrontY, 0, rotate, 0);
-        gl.glRotatef(angleFrontX, rotate, 0, 0);
-        gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
-        addShape(drawable, nameID);
-        gl.glPopMatrix();
-    }
-
-    private void addBackShape(GLAutoDrawable drawable, int nameID) {
-
-        GL2 gl = drawable.getGL().getGL2();
-        gl.glPushMatrix();
-        gl.glColor3f(addShapeRed, addShapeGreen, addShapeBlue);
-        gl.glTranslated(backX, backY, backZ);
-        gl.glScalef(scaleBack, scaleBack, scaleBack);
-        gl.glRotatef(angleBackZ, 0, 0, rotate);
-        gl.glRotatef(angleBackY, 0, rotate, 0);
-        gl.glRotatef(angleBackX, rotate, 0, 0);
-        gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
-        addShape(drawable, nameID);
+        addShape(drawable, nameID, new int[]{angleTopThreeX, angleTopThreeY, angleTopThreeZ});
         gl.glPopMatrix();
     }
 
@@ -1174,42 +1052,10 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
     } // end of getDepth()
 
     private String idToString(int nameID) {
-        if (nameID == LEFT_ID)
-            return "left";
-        else if (nameID == LEFT_TWO_ID)
-            return "left_two";
-        else if (nameID == RIGHT_ID)
-            return "right";
-        else if (nameID == TOP_ID)
-            return "top";
-        else if (nameID == TOP_TWO_ID)
-            return "top_two";
-        else if (nameID == BACK_ID)
-            return "back";
-        else if (nameID == BOTTOM_ID)
-            return "bottom";
-        else if (nameID == BOTTOM_TWO_ID)
-            return "bottom_two";
-        else if (nameID == FRONT_ID)
-            return "front";
-        else if (nameID == SPHERE_ID)
-            return "palette_sphere";
-        else if (nameID == CUBOID_ID)
-            return "palette_cuboid";
-        else if (nameID == TETRAHEDRON_ID)
-            return "palette_tetrahedron";
-        else if (nameID == CUBE_ID)
-            return "palette_cube";
-        else if (nameID == CONE_ID)
-            return "palette_cone";
-        else if (nameID == CYLINDER_ID)
-            return "palette_cylinder";
-        else if (nameID == RECTANGULAR_PYRAMID_ID)
-            return "palette_RECTANGULAR_PYRAMID";
-        else if (nameID == PENTAGON_PYRAMID_ID)
-            return "palette_PENTAGON_PYRAMID";
-        else if (nameID == HEXAGON_PYRAMID_ID)
-            return "palette_HEXAGON_PYRAMID";
+        if (nameID == CHEESE_ID)
+            return "cheese";
+        else if (nameID == MOUSE_ID)
+            return "mouse";
         // we should not reach this point
         return "nameID " + nameID;
     } // end of idToString()
@@ -1221,7 +1067,7 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
         startPicking(drawable);
         palettePicking(drawable);
 
-        gl.glPushName(SPHERE_ID);
+        /*gl.glPushName(SPHERE_ID);
         paletteSphere(drawable);
         gl.glPopName();
 
@@ -1251,10 +1097,19 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
 
         gl.glPushName(PENTAGON_PYRAMID_ID);
         palettePentagonPyramid(drawable);
+        gl.glPopName();*/
+
+        gl.glPushName(CHEESE_ID);
+        paletteCheese(drawable);
         gl.glPopName();
 
-        gl.glPushName(HEXAGON_PYRAMID_ID);
-        paletteHexagonPyramid(drawable);
+
+        gl.glPushName(MOUSE_ID);
+        paletteMouse(drawable);
+        gl.glPopName();
+
+        gl.glPushName(MOUSE_TRAP_ID);
+        paletteMouseTrap(drawable);
         gl.glPopName();
 
         gl.glPushMatrix();
@@ -1263,18 +1118,7 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
 
         gl.glRotated(currentAngleOfRotationX, 1, 0, 0);
         gl.glRotated(currentAngleOfRotationY, 0, 1, 0);
-
-        gl.glPushName(LEFT_ID);
-        drawLeft(drawable);
-        gl.glPopName();
-
-        gl.glPushName(LEFT_TWO_ID);
-        drawLeftTwo(drawable);
-        gl.glPopName();
-
-        gl.glPushName(RIGHT_ID);
-        drawRight(drawable);
-        gl.glPopName();
+        gl.glRotated(currentAngleOfVisibleField, 0, 0, 1);
 
         gl.glPushName(TOP_ID);
         drawTop(drawable);
@@ -1284,20 +1128,8 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
         drawTopTwo(drawable);
         gl.glPopName();
 
-        gl.glPushName(BOTTOM_ID);
-        drawBottom(drawable);
-        gl.glPopName();
-
-        gl.glPushName(BOTTOM_TWO_ID);
-        drawBottomTwo(drawable);
-        gl.glPopName();
-
-        gl.glPushName(FRONT_ID);
-        drawFront(drawable);
-        gl.glPopName();
-
-        gl.glPushName(BACK_ID);
-        drawBack(drawable);
+        gl.glPushName(TOP_THREE_ID);
+        drawTopThree(drawable);
         gl.glPopName();
 
 
@@ -1341,19 +1173,9 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
 
         gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
 
-
-        palettePentagonPyramid(drawable);
-        paletteSphere(drawable);
-        paletteCuboid(drawable);
-        paletteCylinder(drawable);
-        paletteCube(drawable);
-        paletteTetrahedron(drawable);
-        paletteCone(drawable);
-        paletteDog(drawable);
-
-
-        paletteRectangularPyramid(drawable);
-        paletteHexagonPyramid(drawable);
+        paletteMouse(drawable);
+        paletteCheese(drawable);
+        paletteMouseTrap(drawable);
 
 
     }
@@ -1376,123 +1198,45 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
         gl.glPopMatrix();
     }
 
-    private void paletteSphere(GLAutoDrawable drawable) {
+
+    private void paletteCheese(GLAutoDrawable drawable) {
         GL2 gl = drawable.getGL().getGL2();
         gl.glColor3f(paletteRed, paletteGreen, paletteBlue);
         gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
         gl.glPushMatrix();
         gl.glTranslated(-3.5f, 2.5f, 0);
         gl.glScalef(1.25f, 1.25f, 1.25f);
-        Shapes.uvSphere(gl);
+        Shapes.cheese(gl, new int[]{0, 0, 0});
         gl.glPopMatrix();
     }
 
-
-    private void paletteCone(GLAutoDrawable drawable) {
+    private void paletteMouse(GLAutoDrawable drawable) {
         GL2 gl = drawable.getGL().getGL2();
         gl.glColor3f(paletteRed, paletteGreen, paletteBlue);
+
         gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
-        gl.glPushMatrix();
-        gl.glTranslated(-1.25f, 2.5f, 0);
-        gl.glRotatef(-90, 1, 0, 0);
-        gl.glScalef(1.25f, 1.25f, 1.25f);
-        Shapes.uvCone(gl);
-        gl.glPopMatrix();
-    }
 
-    private void paletteCylinder(GLAutoDrawable drawable) {
-        GL2 gl = drawable.getGL().getGL2();
-        gl.glColor3f(paletteRed, paletteGreen, paletteBlue);
-        gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
-        gl.glPushMatrix();
-        gl.glTranslated(0.5f, 2.25f, 0);
-        gl.glRotatef(-90, 1, 0, 0);
-        gl.glScalef(1.25f, 1.25f, 1.25f);
-        Shapes.uvCylinder(gl);
-        gl.glPopMatrix();
-    }
-
-    public void paletteCuboid(GLAutoDrawable drawable) {
-        GL2 gl = drawable.getGL().getGL2();
-        gl.glColor3f(paletteRed, paletteGreen, paletteBlue);
-        gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2.GL_FILL);
-        gl.glPushMatrix();
-        gl.glTranslated(-1.25f, 0, 0);
-        gl.glScalef(0.8f, 0.8f, 0.8f);
-        Shapes.cuboid(gl);
-        gl.glPopMatrix();
-    }
-
-
-    public void paletteCube(GLAutoDrawable drawable) {
-        GL2 gl = drawable.getGL().getGL2();
-        gl.glColor3f(paletteRed, paletteGreen, paletteBlue);
-        gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2.GL_FILL);
-        gl.glPushMatrix();
-        gl.glTranslated(-3.5f, 0, 0);
-        Shapes.cube(gl);
-        gl.glPopMatrix();
-    }
-
-    private void paletteTetrahedron(GLAutoDrawable drawable) {
-        GL2 gl = drawable.getGL().getGL2();
-        gl.glColor3f(paletteRed, paletteGreen, paletteBlue);
-        gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
-        gl.glPushMatrix();
-        gl.glTranslated(0.5f, 0, 0);
-        gl.glScalef(1.25f, 1.25f, 1.25f);
-        gl.glRotatef(30, 0, 1, 0);
-        Shapes.tetrahedron(gl);
-        gl.glPopMatrix();
-    }
-
-
-    private void paletteRectangularPyramid(GLAutoDrawable drawable) {
-        GL2 gl = drawable.getGL().getGL2();
-        gl.glColor3f(paletteRed, paletteGreen, paletteBlue);
-        gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
-        gl.glPushMatrix();
-        gl.glTranslated(-3.5f, -2.5f, 0);
-        gl.glScalef(1.25f, 1.25f, 1.25f);
-        Shapes.rectangularPyramid(gl);
-        gl.glPopMatrix();
-    }
-
-    private void palettePentagonPyramid(GLAutoDrawable drawable) {
-        GL2 gl = drawable.getGL().getGL2();
-        gl.glColor3f(paletteRed, paletteGreen, paletteBlue);
-        gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
-        gl.glPushMatrix();
-        gl.glTranslated(-2f, -1.5f, 0);
-        gl.glScalef(1.25f, 1.25f, 1.25f);
-        Shapes.pentagonPyramid(gl);
-        gl.glPopMatrix();
-    }
-
-    private void paletteHexagonPyramid(GLAutoDrawable drawable) {
-        GL2 gl = drawable.getGL().getGL2();
-        gl.glColor3f(paletteRed, paletteGreen, paletteBlue);
-        gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
         gl.glPushMatrix();
         gl.glTranslated(-3.5f, -4.5f, 0);
-        gl.glRotatef(45, 0, 1, 0);
         gl.glScalef(1.25f, 1.25f, 1.25f);
-        Shapes.hexagonPyramid(gl);
+
+
+        Shapes.mouse(gl, new int[]{0, 0, 0});
         gl.glPopMatrix();
     }
-    private void paletteDog(GLAutoDrawable drawable){
+    private void paletteMouseTrap(GLAutoDrawable drawable) {
         GL2 gl = drawable.getGL().getGL2();
         gl.glColor3f(paletteRed, paletteGreen, paletteBlue);
-        gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 
-        gl.glMatrixMode(GL2.GL_PROJECTION);
-        gl.glLoadIdentity();
-        gl.glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
+        gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
 
-        gl.glMatrixMode(GL2.GL_MODELVIEW);
-        gl.glLoadIdentity();
+        gl.glPushMatrix();
+        gl.glTranslated(-3.5f, 0f, 0);
+        gl.glScalef(1.25f, 1.25f, 1.25f);
 
-        Shapes.dog(gl);
+
+        Shapes.mouseTrap(gl, new int[]{0, 0, 0});
+        gl.glPopMatrix();
     }
 
     private void drawBlueprint(GLAutoDrawable drawable) {
@@ -1510,125 +1254,40 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
         gl.glScalef(scale, scale, scale);
         gl.glRotated(currentAngleOfRotationX, 1, 0, 0);
         gl.glRotated(currentAngleOfRotationY, 0, 1, 0);
+        gl.glRotated(currentAngleOfVisibleField, 0, 0, 1);
 
         gl.glColor3f(1, 1, 1);
         gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
         textures[0].bind(gl);  // Says which texture to use.
-        gl.glEnable(GL.GL_TEXTURE_2D);
-        Shapes.cube(gl, 2, true);
+
+        Shapes.cuboidBox(gl);
         gl.glDisable(GL.GL_TEXTURE_2D);
 
         drawTop(drawable);
         drawTopTwo(drawable);
-        drawRight(drawable);
-        drawLeft(drawable);
-        drawLeftTwo(drawable);
-        drawBottom(drawable);
-        drawBottomTwo(drawable);
-        drawFront(drawable);
-        drawBack(drawable);
+        drawTopThree(drawable);
 
-        addLeftShape(drawable, left_idn);
-        addLeftTwoShape(drawable, left_two_idn);
-        addRightShape(drawable, right_idn);
         addTopShape(drawable, top_idn);
         addTopTwoShape(drawable, top_two_idn);
-        addBottomShape(drawable, bottom_idn);
-        addBottomTwoShape(drawable, bottom_two_idn);
-        addFrontShape(drawable, front_idn);
-        addBackShape(drawable, back_idn);
+        addTopThreeShape(drawable, top_three_idn);
 
         gl.glPopMatrix();
     }
 
-
-
-    private void drawShape(GLAutoDrawable drawable, int randomShape) {
+    private void drawShape(GLAutoDrawable drawable, int randomShape, int[] angles) {
         GL2 gl = drawable.getGL().getGL2();
 
         switch (randomShape) {
-            case SPHERE:
-                Shapes.uvSphere(gl);
+            case MOUSE:
+                Shapes.mouse(gl, angles);
                 break;
-            case CYLINDER:
-                Shapes.uvCylinder(gl);
+            case CHEESE:
+                Shapes.cheese(gl, angles);
                 break;
-            case CONE:
-                Shapes.uvCone(gl);
-                break;
-            case CUBE:
-                Shapes.cube(gl);
-                break;
-            case CUBOID:
-                Shapes.cuboid(gl);
-                break;
-            case TETRAHEDRON:
-                Shapes.tetrahedron(gl);
-                break;
-            case RECTANGULAR_PYRAMID:
-                Shapes.rectangularPyramid(gl);
-                break;
-            case PENTAGON_PYRAMID:
-                Shapes.pentagonPyramid(gl);
-                break;
-            case HEXAGON_PYRAMID:
-                Shapes.hexagonPyramid(gl);
+            case MOUSE_TRAP:
+                Shapes.mouseTrap(gl, angles);
                 break;
         }
-    }
-
-    private void drawLeft(GLAutoDrawable drawable) {
-
-        if (randomLeft == CUBOID) {
-            leftX = -1.5f;
-        }
-
-        GL2 gl = drawable.getGL().getGL2();
-        gl.glPushMatrix();
-        gl.glColor3f(redL, greenL, blueL);
-        gl.glTranslated(leftX, leftY, leftZ);
-        gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
-        gl.glLineWidth(2);
-        gl.glScalef(scaleLeftShape, scaleLeftShape, scaleLeftShape);
-        drawShape(drawable, randomLeft);
-        gl.glPopMatrix();
-    }
-
-    private void drawLeftTwo(GLAutoDrawable drawable) {
-
-        if (randomLeftTwo == CUBOID) {
-            leftTwoX = -1.5f;
-        }
-
-        GL2 gl = drawable.getGL().getGL2();
-        gl.glPushMatrix();
-        gl.glColor3f(redLeftTwo, greenLeftTwo, blueLeftTwo);
-        gl.glTranslated(leftTwoX, leftTwoY, leftTwoZ);
-        gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
-        gl.glLineWidth(2);
-        gl.glScalef(scaleLeftTwoShape, scaleLeftTwoShape, scaleLeftTwoShape);
-        drawShape(drawable, randomLeftTwo);
-        gl.glPopMatrix();
-    }
-
-
-    private void drawRight(GLAutoDrawable drawable) {
-
-        if (randomRight == CUBOID) {
-            rightX = 1.75f;
-        }
-
-        GL2 gl = drawable.getGL().getGL2();
-        gl.glPushMatrix();
-        gl.glColor3f(redR, greenR, blueR);
-        gl.glPolygonMode(GL2.GL_BACK, GL2.GL_LINE);
-        gl.glLineWidth(2);
-
-        gl.glTranslated(rightX, rightY, rightZ);
-        gl.glScalef(scaleRightShape, scaleRightShape, scaleRightShape);
-
-        drawShape(drawable, randomRight);
-        gl.glPopMatrix();
     }
 
 
@@ -1641,8 +1300,7 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
 
         gl.glTranslated(topX, topY, topZ);
         gl.glScalef(scaleTopShape, scaleTopShape, scaleTopShape);
-
-        drawShape(drawable, randomTop);
+        drawShape(drawable, randomTop, randomAngleOne);
         gl.glPopMatrix();
     }
 
@@ -1655,67 +1313,22 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
 
         gl.glTranslated(topTwoX, topTwoY, topTwoZ);
         gl.glScalef(scaleTopTwoShape, scaleTopTwoShape, scaleTopTwoShape);
-
-        drawShape(drawable, randomTopTwo);
+        drawShape(drawable, randomTopTwo, randomAngleTwo);
         gl.glPopMatrix();
     }
 
-    private void drawBottom(GLAutoDrawable drawable) {
-
+    private void drawTopThree(GLAutoDrawable drawable) {
         GL2 gl = drawable.getGL().getGL2();
         gl.glPushMatrix();
-        gl.glColor3f(redB, greenB, blueB);
-        gl.glPolygonMode(GL2.GL_BACK, GL2.GL_LINE);
-        gl.glLineWidth(2);
-
-        gl.glTranslated(bottomX, bottomY, bottomZ);
-        gl.glScalef(scaleBottomShape, scaleBottomShape, scaleBottomShape);
-        drawShape(drawable, randomBottom);
-        gl.glPopMatrix();
-    }
-
-    private void drawBottomTwo(GLAutoDrawable drawable) {
-
-        GL2 gl = drawable.getGL().getGL2();
-        gl.glPushMatrix();
-        gl.glColor3f(redBottomTwo, greenBottomTwo, blueBottomTwo);
-        gl.glPolygonMode(GL2.GL_BACK, GL2.GL_LINE);
-        gl.glLineWidth(2);
-
-        gl.glTranslated(bottomTwoX, bottomTwoY, bottomTwoZ);
-        gl.glScalef(scaleBottomTwoShape, scaleBottomTwoShape, scaleBottomTwoShape);
-        drawShape(drawable, randomBottomTwo);
-        gl.glPopMatrix();
-    }
-
-    private void drawFront(GLAutoDrawable drawable) {
-        GL2 gl = drawable.getGL().getGL2();
-        gl.glPushMatrix();
-        gl.glColor3f(redF, greenF, blueF);
-        gl.glPolygonMode(GL2.GL_BACK, GL2.GL_LINE);
-        gl.glLineWidth(2);
-
-        gl.glTranslated(frontX, frontY, frontZ);
-        gl.glScalef(scaleFrontShape, scaleFrontShape, scaleFrontShape);
-
-        drawShape(drawable, randomFront);
-        gl.glPopMatrix();
-    }
-
-    private void drawBack(GLAutoDrawable drawable) {
-        GL2 gl = drawable.getGL().getGL2();
-        gl.glPushMatrix();
-        gl.glColor3f(redBack, greenBack, blueBack);
+        gl.glColor3f(redTopThree, greenTopThree, blueTopThree);
         gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
         gl.glLineWidth(2);
 
-        gl.glTranslated(backX, backY, backZ);
-        gl.glScalef(scaleBackShape, scaleBackShape, scaleBackShape);
-
-        drawShape(drawable, randomBack);
+        gl.glTranslated(topThreeX, topThreeY, topThreeZ);
+        gl.glScalef(scaleTopThreeShape, scaleTopThreeShape, scaleTopThreeShape);
+        drawShape(drawable, randomTopThree, randomAngleThree);
         gl.glPopMatrix();
     }
-
 
     @Override
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
@@ -1730,44 +1343,11 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
 
     public void colorShape(int travers) {
         switch (travers) {
-            case LEFT_ID:
-                redL = 1;
-                redLeftTwo = 0;
-                redT = 0;
-                redTopTwo = 0;
-                redB = 0;
-                redBottomTwo = 0;
-                redR = 0;
-                redF = 0;
-                redBack = 0;
-                break;
-            case LEFT_TWO_ID:
-                redL = 0;
-                redLeftTwo = 1;
-                redT = 0;
-                redTopTwo = 0;
-                redB = 0;
-                redBottomTwo = 0;
-                redR = 0;
-                redF = 0;
-                redBack = 0;
-                break;
-            case RIGHT_ID:
-                redL = 0;
-                redLeftTwo = 0;
-                redT = 0;
-                redTopTwo = 0;
-                redB = 0;
-                redBottomTwo = 0;
-                redR = 1;
-                redF = 0;
-                redBack = 0;
-                break;
+
             case TOP_ID:
-                redL = 0;
-                redLeftTwo = 0;
                 redT = 1;
                 redTopTwo = 0;
+                redTopThree=0;
                 redB = 0;
                 redBottomTwo = 0;
                 redR = 0;
@@ -1776,59 +1356,24 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
                 break;
 
             case TOP_TWO_ID:
-                redL = 0;
-                redLeftTwo = 0;
                 redT = 0;
                 redTopTwo = 1;
+                redTopThree=0;
                 redB = 0;
                 redBottomTwo = 0;
                 redR = 0;
                 redF = 0;
                 redBack = 0;
                 break;
-            case BOTTOM_ID:
-                redL = 0;
-                redLeftTwo = 0;
+            case TOP_THREE_ID:
                 redT = 0;
                 redTopTwo = 0;
-                redB = 1;
-                redBottomTwo = 0;
-                redR = 0;
-                redF = 0;
-                redBack = 0;
-                break;
-            case BOTTOM_TWO_ID:
-                redL = 0;
-                redLeftTwo = 0;
-                redT = 0;
-                redTopTwo = 0;
-                redB = 0;
-                redBottomTwo = 1;
-                redR = 0;
-                redF = 0;
-                redBack = 0;
-                break;
-            case FRONT_ID:
-                redL = 0;
-                redLeftTwo = 0;
-                redT = 0;
-                redTopTwo = 0;
-                redB = 0;
-                redBottomTwo = 0;
-                redR = 0;
-                redF = 1;
-                redBack = 0;
-                break;
-            case BACK_ID:
-                redL = 0;
-                redLeftTwo = 0;
-                redT = 0;
-                redTopTwo = 0;
+                redTopThree=1;
                 redB = 0;
                 redBottomTwo = 0;
                 redR = 0;
                 redF = 0;
-                redBack = 1;
+                redBack = 0;
                 break;
         }
     }
@@ -1839,362 +1384,155 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
         switch (e.getKeyCode()) {
 
             // X-rotation
-            case KeyEvent.VK_NUMPAD1:
+            case KeyEvent.VK_2:
 
-                if (travers == 1) {
-                    if (angleLeftX < 360) {
-                        angleLeftX += angleDelta;
-                        System.out.println(angleLeftX);
-                    }
-                } else if (travers == 2) {
-                    if (angleLeftTwoX < 360) {
-                        angleLeftTwoX += angleDelta;
-                        System.out.println(angleLeftTwoX);
-                    }
-                } else if (travers == 3) {
-                    if (angleRightX < 360) {
-                        angleRightX += angleDelta;
-                        System.out.println(angleRightX);
-                    }
-                } else if (travers == 4) {
+                 if (travers == 1) {
                     if (angleTopX < 360) {
                         angleTopX += angleDelta;
-                        System.out.println(angleTopX);
+                        System.out.println(angleTopX+ ", random = " + randomAngleOne[0]);
                     }
-                } else if (travers == 5) {
+                } else if (travers == 2) {
                     if (angleTopTwoX < 360) {
                         angleTopTwoX += angleDelta;
-                        System.out.println(angleTopTwoX);
+                        System.out.println(angleTopTwoX+ ", random = " + randomAngleTwo[0]);
                     }
-                } else if (travers == 6) {
-                    if (angleBottomX < 360) {
-                        angleBottomX += angleDelta;
-                        System.out.println(angleBottomX);
-                    }
-                } else if (travers == 7) {
-                    if (angleBottomTwoX < 360) {
-                        angleBottomTwoX += angleDelta;
-                        System.out.println(angleBottomTwoX);
-                    }
-                } else if (travers == 8) {
-                    if (angleFrontX < 360) {
-                        angleFrontX += angleDelta;
-                        System.out.println(angleFrontX);
-                    }
-                } else if (travers == 9) {
-                    if (angleBackX < 360) {
-                        angleBackX += angleDelta;
-                        System.out.println(angleBackX);
+                } else if (travers == 3) {
+                    if (angleTopThreeX < 360) {
+                        angleTopThreeX += angleDelta;
+                        System.out.println(angleTopThreeX+ ", random = " + randomAngleThree[0]);
                     }
                 }
                 break;
-            case KeyEvent.VK_NUMPAD3:
+            case KeyEvent.VK_1:
 
                 if (travers == 1) {
-                    if (angleLeftX > 0) {
-                        angleLeftX -= angleDelta;
-                        System.out.println(angleLeftX);
-                    }
-                } else if (travers == 2) {
-                    if (angleLeftTwoX > 0) {
-                        angleLeftTwoX -= angleDelta;
-                        System.out.println(angleLeftTwoX);
-                    }
-                } else if (travers == 3) {
-                    if (angleRightX > 0) {
-                        angleRightX -= angleDelta;
-                        System.out.println(angleRightX);
-                    }
-                } else if (travers == 4) {
                     if (angleTopX > 0) {
                         angleTopX -= angleDelta;
-                        System.out.println(angleTopX);
+                        System.out.println(angleTopX+ ", random = " + randomAngleOne[0]);
                     }
-                } else if (travers == 5) {
+                } else if (travers == 2) {
                     if (angleTopTwoX > 0) {
                         angleTopTwoX -= angleDelta;
-                        System.out.println(angleTopTwoX);
+                        System.out.println(angleTopTwoX+ ", random = " + randomAngleTwo[0]);
                     }
-                } else if (travers == 6) {
-                    if (angleBottomX > 0) {
-                        angleBottomX -= angleDelta;
-                        System.out.println(angleBottomX);
-                    }
-                } else if (travers == 7) {
-                    if (angleBottomTwoX > 0) {
-                        angleBottomTwoX -= angleDelta;
-                        System.out.println(angleBottomTwoX);
-                    }
-                } else if (travers == 8) {
-                    if (angleFrontX > 0) {
-                        angleFrontX -= angleDelta;
-                        System.out.println(angleFrontX);
-                    }
-                } else if (travers == 9) {
-                    if (angleBackX > 0) {
-                        angleBackX -= angleDelta;
-                        System.out.println(angleBackX);
+                } else if (travers == 3) {
+                    if (angleTopThreeX > 0) {
+                        angleTopThreeX -= angleDelta;
+                        System.out.println(angleTopThreeX+ ", random = " + randomAngleThree[0]);
                     }
                 }
 
                 break;
 
             // Y-rotation
-            case KeyEvent.VK_NUMPAD4:
+            case KeyEvent.VK_4:
 
-                if (travers == 1) {
-                    if (angleLeftY < 360) {
-                        angleLeftY += angleDelta;
-                        System.out.println(angleLeftY);
-                    }
-                } else if (travers == 2) {
-                    if (angleLeftTwoY < 360) {
-                        angleLeftTwoY += angleDelta;
-                        System.out.println(angleLeftTwoY);
-                    }
-                } else if (travers == 3) {
-                    if (angleRightY < 360) {
-                        angleRightY += angleDelta;
-                        System.out.println(angleRightY);
-                    }
-                } else if (travers == 4) {
+                 if (travers == 1) {
                     if (angleTopY < 360) {
                         angleTopY += angleDelta;
-                        System.out.println(angleTopY);
+                        System.out.println(angleTopY + ", random = " + randomAngleOne[1]);
                     }
-                } else if (travers == 5) {
+                } else if (travers == 2) {
                     if (angleTopTwoY < 360) {
                         angleTopTwoY += angleDelta;
-                        System.out.println(angleTopTwoY);
+                        System.out.println(angleTopTwoY + ", random = " + randomAngleTwo[1]);
                     }
-                } else if (travers == 6) {
-                    if (angleBottomY < 360) {
-                        angleBottomY += angleDelta;
-                        System.out.println(angleBottomY);
-                    }
-                } else if (travers == 7) {
-                    if (angleBottomTwoY < 360) {
-                        angleBottomTwoY += angleDelta;
-                        System.out.println(angleBottomTwoY);
-                    }
-                } else if (travers == 8) {
-                    if (angleFrontY < 360) {
-                        angleFrontY += angleDelta;
-                        System.out.println(angleFrontY);
-                    }
-                } else if (travers == 9) {
-                    if (angleBackY < 360) {
-                        angleBackY += angleDelta;
-                        System.out.println(angleBackY);
+                } else if (travers == 3) {
+                    if (angleTopThreeY < 360) {
+                        angleTopThreeY += angleDelta;
+                        System.out.println(angleTopThreeY + ", random = " + randomAngleThree[1]);
                     }
                 }
                 break;
-            case KeyEvent.VK_NUMPAD6:
+            case KeyEvent.VK_3:
 
                 if (travers == 1) {
-                    if (angleLeftY > 0) {
-                        angleLeftY -= angleDelta;
-                        System.out.println(angleLeftY);
-                    }
-                } else if (travers == 2) {
-                    if (angleLeftTwoY > 0) {
-                        angleLeftTwoY -= angleDelta;
-                        System.out.println(angleLeftTwoY);
-                    }
-                } else if (travers == 3) {
-                    if (angleRightY > 0) {
-                        angleRightY -= angleDelta;
-                        System.out.println(angleRightY);
-                    }
-                } else if (travers == 4) {
                     if (angleTopY > 0) {
                         angleTopY -= angleDelta;
-                        System.out.println(angleTopY);
+                        System.out.println(angleTopY+ ", random = " + randomAngleOne[1]);
                     }
-                } else if (travers == 5) {
+                } else if (travers == 2) {
                     if (angleTopTwoY > 0) {
                         angleTopTwoY -= angleDelta;
-                        System.out.println(angleTopTwoY);
+                        System.out.println(angleTopTwoY+ ", random = " + randomAngleTwo[1]);
                     }
-                } else if (travers == 6) {
-                    if (angleBottomY > 0) {
-                        angleBottomY -= angleDelta;
-                        System.out.println(angleBottomY);
-                    }
-                } else if (travers == 7) {
-                    if (angleBottomTwoY > 0) {
-                        angleBottomTwoY -= angleDelta;
-                        System.out.println(angleBottomTwoY);
-                    }
-                } else if (travers == 8) {
-                    if (angleFrontY > 0) {
-                        angleFrontY -= angleDelta;
-                        System.out.println(angleFrontY);
-                    }
-                } else if (travers == 9) {
-                    if (angleBackY > 0) {
-                        angleBackY -= angleDelta;
-                        System.out.println(angleBackY);
+                }else if (travers == 3) {
+                    if (angleTopThreeY > 0) {
+                        angleTopThreeY -= angleDelta;
+                        System.out.println(angleTopThreeY + ", random = " + randomAngleThree[1]);
                     }
                 }
 
                 break;
 
             // Z-rotation
-            case KeyEvent.VK_NUMPAD7:
+            case KeyEvent.VK_6:
 
                 if (travers == 1) {
-                    if (angleLeftZ < 360) {
-                        angleLeftZ += angleDelta;
-                        System.out.println(angleLeftZ);
-                    }
-                } else if (travers == 2) {
-                    if (angleLeftTwoZ < 360) {
-                        angleLeftTwoZ += angleDelta;
-                        System.out.println(angleLeftTwoZ);
-                    }
-                } else if (travers == 3) {
-                    if (angleRightZ < 360) {
-                        angleRightZ += angleDelta;
-                        System.out.println(angleRightZ);
-                    }
-                } else if (travers == 4) {
                     if (angleTopZ < 360) {
                         angleTopZ += angleDelta;
-                        System.out.println(angleTopZ);
+                        System.out.println(angleTopZ + ", random = " + randomAngleOne[2]);
                     }
-                } else if (travers == 5) {
+                } else if (travers == 2) {
                     if (angleTopTwoZ < 360) {
                         angleTopTwoZ += angleDelta;
-                        System.out.println(angleTopTwoZ);
+                        System.out.println(angleTopTwoZ + ", random = " + randomAngleTwo[2]);
                     }
-                } else if (travers == 6) {
-                    if (angleBottomZ < 360) {
-                        angleBottomZ += angleDelta;
-                        System.out.println(angleBottomZ);
-                    }
-                } else if (travers == 7) {
-                    if (angleBottomTwoZ < 360) {
-                        angleBottomTwoZ += angleDelta;
-                        System.out.println(angleBottomTwoZ);
-                    }
-                } else if (travers == 8) {
-                    if (angleFrontZ < 360) {
-                        angleFrontZ += angleDelta;
-                        System.out.println(angleFrontZ);
-                    }
-                } else if (travers == 9) {
-                    if (angleBackZ < 360) {
-                        angleBackZ += angleDelta;
-                        System.out.println(angleBackZ);
+                } else if (travers == 3) {
+                    if (angleTopThreeZ < 360) {
+                        angleTopThreeZ += angleDelta;
+                        System.out.println(angleTopThreeZ + ", random = " + randomAngleThree[2]);
                     }
                 }
                 break;
-            case KeyEvent.VK_NUMPAD9:
-
+            case KeyEvent.VK_5:
                 if (travers == 1) {
-                    if (angleLeftZ > 0) {
-                        angleLeftZ -= angleDelta;
-                        System.out.println(angleLeftZ);
-                    }
-                } else if (travers == 2) {
-                    if (angleLeftTwoZ > 0) {
-                        angleLeftTwoZ -= angleDelta;
-                        System.out.println(angleLeftZ);
-                    }
-                } else if (travers == 3) {
-                    if (angleRightZ > 0) {
-                        angleRightZ -= angleDelta;
-                        System.out.println(angleRightZ);
-                    }
-                } else if (travers == 4) {
                     if (angleTopZ > 0) {
                         angleTopZ -= angleDelta;
-                        System.out.println(angleTopZ);
+                        System.out.println(angleTopZ+ ", random = " + randomAngleOne[2]);
                     }
-                } else if (travers == 5) {
+                } else if (travers == 2) {
                     if (angleTopTwoZ > 0) {
                         angleTopTwoZ -= angleDelta;
-                        System.out.println(angleTopTwoZ);
+                        System.out.println(angleTopTwoZ+ ", random = " + randomAngleTwo[2]);
                     }
-                } else if (travers == 6) {
-                    if (angleBottomZ > 0) {
-                        angleBottomZ -= angleDelta;
-                        System.out.println(angleBottomZ);
-                    }
-                } else if (travers == 7) {
-                    if (angleBottomTwoZ > 0) {
-                        angleBottomTwoZ -= angleDelta;
-                        System.out.println(angleBottomTwoZ);
-                    }
-                } else if (travers == 8) {
-                    if (angleFrontZ > 0) {
-                        angleFrontZ -= angleDelta;
-                        System.out.println(angleFrontZ);
-                    }
-                } else if (travers == 9) {
-                    if (angleBackZ > 0) {
-                        angleBackZ -= angleDelta;
-                        System.out.println(angleBackZ);
+                } else if (travers == 3) {
+                    if (angleTopThreeZ > 0) {
+                        angleTopThreeZ -= angleDelta;
+                        System.out.println(angleTopThreeZ + ", random = " + randomAngleThree[2]);
                     }
                 }
 
                 break;
 
             case KeyEvent.VK_S:
-
                 if (travers == 1) {
-                    scaleLeft += scaleDelta;
-                    System.out.println(scaleLeft + "Left scale");
-                } else if (travers == 2) {
-                    scaleLeftTwo += scaleDelta;
-                } else if (travers == 3) {
-                    scaleRight += scaleDelta;
-                } else if (travers == 4) {
                     scaleTop += scaleDelta;
-                } else if (travers == 5) {
+                    System.out.println("top " + scaleTop);
+                } else if (travers == 2) {
                     scaleTopTwo += scaleDelta;
-                } else if (travers == 6) {
-                    scaleBottom += scaleDelta;
-                } else if (travers == 7) {
-                    scaleBottomTwo += scaleDelta;
-                } else if (travers == 8) {
-                    scaleFront += scaleDelta;
-                } else if (travers == 9) {
-                    scaleBack += scaleDelta;
+                    System.out.println("top2 " + scaleTopTwo);
+                } else if (travers == 3) {
+                    scaleTopThree += scaleDelta;
+                    System.out.println("top3 " + scaleTopThree);
                 }
 
                 break;
             case KeyEvent.VK_A:
                 System.out.println(travers);
-                if (travers == 1) {
-                    scaleLeft -= scaleDelta;
-                } else if (travers == 2) {
-                    scaleLeftTwo -= scaleDelta;
-                } else if (travers == 3) {
-                    scaleRight -= scaleDelta;
-                } else if (travers == 4) {
+                 if (travers == 1) {
                     scaleTop -= scaleDelta;
-                } else if (travers == 5) {
+                } else if (travers == 2) {
                     scaleTopTwo -= scaleDelta;
-                } else if (travers == 6) {
-                    scaleBottom -= scaleDelta;
-                } else if (travers == 7) {
-                    scaleBottomTwo -= scaleDelta;
-                } else if (travers == 8) {
-                    scaleFront -= scaleDelta;
-                } else if (travers == 9) {
-                    scaleBack -= scaleDelta;
-                    System.out.println(scaleBack);
-                    System.out.println(travers);
+                } else if (travers == 3) {
+                    scaleTopThree -= scaleDelta;
                 }
-
                 break;
 
             case KeyEvent.VK_W:
                 travers++;
                 colorShape(travers);
-                if (travers == 10) {
+                if (travers == 4) {
                     travers = 0;
                 }
                 break;
@@ -2203,20 +1541,23 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
                 break;
             case KeyEvent.VK_DOWN:
                 currentAngleOfRotationX++;
+                //  System.out.println("x " + currentAngleOfRotationX);
                 break;
             case KeyEvent.VK_LEFT:
                 currentAngleOfRotationY++;
+                //   System.out.println("y " + currentAngleOfRotationY);
                 break;
             case KeyEvent.VK_RIGHT:
                 currentAngleOfRotationY--;
 
                 break;
-            case KeyEvent.VK_ADD:
+            case KeyEvent.VK_OPEN_BRACKET:
                 if (currentAngleOfVisibleField > 1) {
                     currentAngleOfVisibleField--;
                 }
+                //   System.out.println("z " + currentAngleOfVisibleField);
                 break;
-            case KeyEvent.VK_SUBTRACT:
+            case KeyEvent.VK_CLOSE_BRACKET:
                 if (currentAngleOfVisibleField < 179) {
                     currentAngleOfVisibleField++;
                 }
@@ -2359,189 +1700,71 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
     public void printMatch(GLAutoDrawable drawable) {
 
         if (travers == 1) {
-            if (shape[randomLeft].equals(shape[left_idn]))
-                if (leftScaleCheck(scaleLeft).equals("appropriate") && rotationCheck(randomLeft, angleLeftX, angleLeftY, angleLeftZ).equals("correct")) {
+            if (checkShapes(randomTop,top_idn))
+                if (topScaleCheck(scaleTop).equals("appropriate") && rotationCheck(1, angleTopX, angleTopY, angleTopZ).equals("correct")) {
                     writeMatch("Well Done! Correct shape, rotation and scaling.",
                             (int) (windowWidth / 4f), windowHeight - 40);
                 }
         } else if (travers == 2) {
-            if (shape[randomLeftTwo].equals(shape[left_two_idn]))
-                if (leftTwoScaleCheck(scaleLeftTwo).equals("appropriate") && rotationCheck(randomLeftTwo, angleLeftTwoX, angleLeftTwoY, angleLeftTwoZ).equals("correct")) {
+            if (checkShapes(randomTopTwo,top_two_idn))
+                if (topTwoScaleCheck(scaleTopTwo).equals("appropriate") && rotationCheck(2, angleTopTwoX, angleTopTwoY, angleTopTwoZ).equals("correct")) {
                     writeMatch("Well Done! Correct shape, rotation and scaling.",
                             (int) (windowWidth / 4f), windowHeight - 40);
                 }
-        } else if (travers == 3) {
-
-            if (shape[randomRight].equals(shape[right_idn]))
-                if (rightScaleCheck(scaleRight).equals("appropriate")
-                        && rotationCheck(randomRight, angleRightX, angleRightY, angleRightZ).equals("correct")) {
-                    writeMatch("Well Done! Correct shape, rotation and scaling.",
-                            (int) (windowWidth / 4f), windowHeight - 40);
-                }
-        } else if (travers == 4) {
-            if (shape[randomTop].equals(shape[top_idn]))
-                if (topScaleCheck(scaleTop).equals("appropriate")
-                        && rotationCheck(randomTop, angleTopX, angleTopY, angleTopZ).equals("correct")) {
-                    writeMatch("Well Done! Correct shape, rotation and scaling.",
-                            (int) (windowWidth / 4f), windowHeight - 40);
-                }
-
-        } else if (travers == 5) {
-            if (shape[randomTopTwo].equals(shape[top_two_idn]))
-                if (topTwoScaleCheck(scaleTopTwo).equals("appropriate")
-                        && rotationCheck(randomTopTwo, angleTopTwoX, angleTopTwoY, angleTopTwoZ).equals("correct")) {
-                    writeMatch("Well Done! Correct shape, rotation and scaling.",
-                            (int) (windowWidth / 4f), windowHeight - 40);
-                }
-
-        } else if (travers == 6) {
-            if (shape[randomBottom].equals(shape[bottom_idn]))
-                if (bottomTwoScaleCheck(scaleBottom).equals("appropriate")
-                        && rotationCheck(randomBottom, angleBottomX, angleBottomY, angleBottomZ).equals("correct")) {
-                    writeMatch("Well Done! Correct shape, rotation and scaling.",
-                            (int) (windowWidth / 4f), windowHeight - 40);
-                }
-
-        } else if (travers == 7) {
-            if (shape[randomBottomTwo].equals(shape[bottom_two_idn]))
-                if (bottomTwoScaleCheck(scaleBottomTwo).equals("appropriate")
-                        && rotationCheck(randomBottomTwo, angleBottomTwoX, angleBottomTwoY, angleBottomTwoZ).equals("correct")) {
-                    writeMatch("Well Done! Correct shape, rotation and scaling.",
-                            (int) (windowWidth / 4f), windowHeight - 40);
-                }
-
-        } else if (travers == 8) {
-            if (shape[randomFront].equals(shape[front_idn]))
-                if (frontScaleCheck(scaleFront).equals("appropriate")
-                        && rotationCheck(randomFront, angleFrontX, angleFrontY, angleFrontZ).equals("correct")) {
-                    writeMatch("Well Done! Correct shape, rotation and scaling.",
-                            (int) (windowWidth / 4f), windowHeight - 40);
-                }
-
-        } else if (travers == 9) {
-            if (shape[randomBack].equals(shape[back_idn]))
-                if (backScaleCheck(scaleBack).equals("appropriate")
-                        && rotationCheck(randomBack, angleBackX, angleBackY, angleBackZ).equals("correct")) {
+        }else if (travers == 3) {
+            if (checkShapes(randomTopThree,top_three_idn))
+                if (topThreeScaleCheck(scaleTopThree).equals("appropriate") && rotationCheck(3, angleTopThreeX, angleTopThreeY, angleTopThreeZ).equals("correct")) {
                     writeMatch("Well Done! Correct shape, rotation and scaling.",
                             (int) (windowWidth / 4f), windowHeight - 40);
                 }
         }
     }
 
+    private  boolean checkShapes(int shapeNum, int shapeId) {
+        return shape.get(shapeNum).equals(shape.get(shapeId));
+    }
+
     public void printResult(GLAutoDrawable drawable) {
-        writeText("RESULT: " + matchedShape() + "/9 shape matched correctly", (int) (windowWidth / 3.5f), windowHeight - 40);
-
-        writeText("Left One: blueprint shape: " +
-                        shape[randomLeft] +
-                        " - matched shape: " +
-                        shape[left_idn] + " Scaling: " +
-                        leftScaleCheck(scaleLeft) +
-                        " Rotation: " + rotationCheck(randomLeft, angleLeftX, angleLeftY, angleLeftZ),
-                (int) (windowWidth / 3.5f),
-                windowHeight - 60);
-
-        writeText("Left Two: blueprint shape: " +
-                        shape[randomLeftTwo] +
-                        " - matched shape: " +
-                        shape[left_two_idn] + " Scaling: " +
-                        leftTwoScaleCheck(scaleLeftTwo) +
-                        " Rotation: " + rotationCheck(randomLeftTwo, angleLeftTwoX, angleLeftTwoY, angleLeftTwoZ),
-                (int) (windowWidth / 3.5f),
-                windowHeight - 80);
-
-        writeText("Right: blueprint shape: " +
-                        shape[randomRight] +
-                        " - matched shape: " +
-                        shape[right_idn] + " Scaling: " +
-                        rightScaleCheck(scaleRight) +
-                        " Rotation: " + rotationCheck(randomRight, angleRightX, angleRightY, angleRightZ),
-                (int) (windowWidth / 3.5f),
-                windowHeight - 100);
+        writeText("RESULT: " + matchedShape() + "/3 shape matched correctly", (int) (windowWidth / 3.5f), windowHeight - 40);
 
         writeText("Top One: blueprint shape: " +
-                        shape[randomTop] +
+                        shape.get(randomTop) +
                         " - matched shape: " +
-                        shape[top_idn] + " Scaling: " +
+                        shape.get(top_idn) + " Scaling: " +
                         topScaleCheck(scaleTop) +
                         " Rotation: " + rotationCheck(randomTop, angleTopX, angleTopY, angleTopZ),
                 (int) (windowWidth / 3.5f),
-                windowHeight - 120);
+                windowHeight - 60);
 
         writeText("Top Two: blueprint shape: " +
-                        shape[randomTopTwo] +
+                        shape.get(randomTopTwo) +
                         " - matched shape: " +
-                        shape[top_two_idn] + " Scaling: " +
+                        shape.get(top_two_idn) + " Scaling: " +
                         topTwoScaleCheck(scaleTopTwo) +
                         " Rotation: " + rotationCheck(randomTopTwo, angleTopTwoX, angleTopTwoY, angleTopTwoZ),
                 (int) (windowWidth / 3.5f),
-                windowHeight - 140);
-
-        writeText("Bottom One: blueprint shape: " +
-                        shape[randomBottom] +
+                windowHeight - 80);
+        writeText("Top Two: blueprint shape: " +
+                        shape.get(randomTopThree) +
                         " - matched shape: " +
-                        shape[bottom_idn] + " Scaling: " +
-                        bottomScaleCheck(scaleBottom) +
-                        " Rotation: " + rotationCheck(randomBottom, angleBottomX, angleBottomY, angleBottomZ),
+                        shape.get(top_three_idn) + " Scaling: " +
+                        topThreeScaleCheck(scaleTopThree) +
+                        " Rotation: " + rotationCheck(randomTopThree, angleTopThreeX, angleTopThreeY, angleTopThreeZ),
                 (int) (windowWidth / 3.5f),
-                windowHeight - 160);
+                windowHeight - 100);
 
-        writeText("Bottom Two: blueprint shape: " +
-                        shape[randomBottomTwo] +
-                        " - matched shape: " +
-                        shape[bottom_two_idn] + " Scaling: " +
-                        bottomTwoScaleCheck(scaleBottomTwo) +
-                        " Rotation: " + rotationCheck(randomBottomTwo, angleBottomTwoX, angleBottomTwoY, angleBottomTwoZ),
-                (int) (windowWidth / 3.5f),
-                windowHeight - 180);
-
-        writeText("Front: blueprint shape: " +
-                        shape[randomFront] +
-                        " - matched shape: " +
-                        shape[front_idn] + " Scaling: " +
-                        frontScaleCheck(scaleFront) +
-                        " Rotation: " + rotationCheck(randomFront, angleFrontX, angleFrontY, angleFrontZ),
-                (int) (windowWidth / 3.5f),
-                windowHeight - 200);
-
-        writeText("Back: blueprint shape: " +
-                        shape[randomBack] +
-                        " - matched shape: " +
-                        shape[back_idn] + " Scaling: " +
-                        backScaleCheck(scaleBack) +
-                        " Rotation: " + rotationCheck(randomBack, angleBackX, angleBackY, angleBackZ),
-                (int) (windowWidth / 3.5f),
-                windowHeight - 220);
     }
 
     private int matchedShape() {
 
         int match = 0;
-
-        if (shape[randomLeft].equals(shape[left_idn])) {
+        if (checkShapes(randomTop,top_idn)) {
             match++;
         }
-        if (shape[randomLeftTwo].equals(shape[left_two_idn])) {
+        if (checkShapes(randomTopTwo,top_two_idn)) {
             match++;
         }
-        if (shape[randomRight].equals(shape[right_idn])) {
-            match++;
-        }
-        if (shape[randomTop].equals(shape[top_idn])) {
-            match++;
-        }
-        if (shape[randomTopTwo].equals(shape[top_two_idn])) {
-            match++;
-        }
-        if (shape[randomBottom].equals(shape[bottom_idn])) {
-            match++;
-        }
-        if (shape[randomBottomTwo].equals(shape[bottom_two_idn])) {
-            match++;
-        }
-        if (shape[randomFront].equals(shape[front_idn])) {
-            match++;
-        }
-        if (shape[randomBack].equals(shape[back_idn])) {
+        if (checkShapes(randomTopThree,top_three_idn)) {
             match++;
         }
         return match;
@@ -2613,6 +1836,18 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
         return text;
     }
 
+    public String topThreeScaleCheck(double scale) {
+
+        double scaling = Math.round(scale * 100.0) / 100.0;
+
+        String text;
+        if (scaling == 1.0) {
+            text = "appropriate";
+        } else {
+            text = "not appropriate";
+        }
+        return text;
+    }
     public String bottomScaleCheck(double scale) {
 
         double scaling = Math.round(scale * 100.0) / 100.0;
@@ -2665,11 +1900,11 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
         return text;
     }
 
-    public String rotationCheck(int shape, int angleX, int angleY, int angleZ) {
+    public String rotationCheck(int top, int angleX, int angleY, int angleZ) {
 
         // shape #:
-        // 1 - SPHERE
-        // 2 - CYLINDER
+        // 1 - MOUSE
+        // 2 - CHEESE
         // 3 - CONE
         // 4 - CUBE
         // 5 - CUBOID
@@ -2680,76 +1915,23 @@ public class Exam extends GLCanvas implements GLEventListener, KeyListener, Mous
 
 
         String text;
-        if (shape == 1) {
-            text = "correct";
-        } else if (shape == 2) {
-            // x and y
-            if ((angleX == 0 || angleX == 360 || angleX == 180) && (angleY == 0 || angleY == 360 || angleY == 180)) {
+        if (top == 1) {
+            // x, y and z
+            if (randomAngleOne[0] == angleX && angleY == randomAngleOne[1] && angleZ == randomAngleOne[2]) {
                 text = "correct";
             } else {
                 text = "incorrect";
             }
-        } else if (shape == 6) {
+        } else if (top == 2) {
             // x, y and z
-            if ((angleX == 180 && angleY == 180 && angleZ == 180) ||
-                    ((angleX == 0 || angleX == 360 || angleX == 180) &&
-                            (angleY == 0 || angleY == 360 || angleY == 180)
-                            && (angleZ == 0 || angleZ == 360))) {
+            if (randomAngleTwo[0] == angleX && angleY == randomAngleTwo[1] && angleZ == randomAngleTwo[2]) {
                 text = "correct";
             } else {
                 text = "incorrect";
             }
-        } else if (shape == 3) {
+        } else if (top == 3) {
             // x, y and z
-            if ((angleX == 180 && angleY == 180) || ((angleX == 0 || angleX == 360) && (angleY == 0 || angleY == 360))) {
-                text = "correct";
-            } else {
-                text = "incorrect";
-            }
-        } else if (shape == 5) {
-            // x, y and z
-            if (((angleX == 0 || angleX == 360 || angleX == 180 || angleX == 270 || angleX == 90) &&
-                    (angleY == 0 || angleY == 360 || angleY == 180) &&
-                    (angleZ == 0 || angleZ == 360 || angleZ == 180))) {
-                text = "correct";
-            } else {
-                text = "incorrect";
-            }
-        } else if (shape == 4) {
-            // x, y and z
-            if (((angleX == 0 || angleX == 360 || angleX == 180 || angleX == 270 || angleX == 90) &&
-                    (angleY == 0 || angleY == 360 || angleY == 180 || angleY == 270 || angleY == 90) &&
-                    (angleZ == 0 || angleZ == 360 || angleZ == 180 || angleZ == 270 || angleZ == 90))) {
-                text = "correct";
-            } else {
-                text = "incorrect";
-            }
-        } else if (shape == 7) {
-            // x, y and z
-            if (((angleX == 0) &&
-                    (angleY == 0 || angleY == 90 || angleY == 180 || angleY == 270 || angleY == 360) &&
-                    (angleZ == 0 || angleZ == 360)) ||
-                    ((angleX == 90) && (angleY == 90) && (angleZ == 90)) ||
-                    ((angleX == 90) && (angleY == 270) && (angleZ == 270)) ||
-                    ((angleX == 180) && (angleY == 0 || angleY == 90 || angleY == 180 || angleY == 270 || angleY == 360) && (angleZ == 180))) {
-                text = "correct";
-            } else {
-                text = "incorrect";
-            }
-        } else if (shape == 8) {
-            // x, y and z
-            if (((angleY == 0 || angleY == 360) &&
-                    (angleX == 0 || angleX == 360) &&
-                    (angleZ == 0 || angleZ == 360))) {
-                text = "correct";
-            } else {
-                text = "incorrect";
-            }
-        } else if (shape == 9) {
-            // x, y and z
-            if (((angleY == 0 || angleY == 360 || angleY == 180) &&
-                    (angleX == 0 || angleX == 360) &&
-                    (angleZ == 0 || angleZ == 360))) {
+            if (randomAngleThree[0] == angleX && angleY == randomAngleThree[1] && angleZ == randomAngleThree[2]) {
                 text = "correct";
             } else {
                 text = "incorrect";

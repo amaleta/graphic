@@ -1,11 +1,26 @@
 import com.jogamp.opengl.GL2;
+import com.jogamp.opengl.glu.GLU;
+import com.jogamp.opengl.glu.GLUquadric;
+import com.jogamp.opengl.util.gl2.GLUT;
 
 public class Shapes {
 
+    private static GLUT glut = new GLUT();
+    private static GLU glu = new GLU();
 
-    public static void dog(GL2 gl) {
-        dog(gl);
+
+    public static void mouse(GL2 gl, int[] angles) {
+        renderMouse(gl, angles);
     }
+
+    public static void cheese(GL2 gl, int[] angles) {
+        renderCheese(gl, angles);
+    }
+
+    public static void mouseTrap(GL2 gl, int[] angles) {
+        renderMouseTrap(gl, angles);
+    }
+
     public static void cube(GL2 gl) {
         cube(gl, 1, true);
     }
@@ -306,6 +321,59 @@ public class Shapes {
         gl.glEnd();
     }
 
+    public static void cuboidBox(GL2 gl) {
+        float scale = 2f;
+
+        gl.glColor3f(0.400f, 0.140f, 0.100f);
+        // Draw the front face (rectangle)
+        gl.glBegin(GL2.GL_QUADS);
+        gl.glVertex3f(-0.5f * scale, 0.3f * scale, 0.5f * scale);
+        gl.glVertex3f(0.5f * scale, 0.3f * scale, 0.5f * scale);
+        gl.glVertex3f(0.5f * scale, 0.5f * scale, 0.5f * scale);
+        gl.glVertex3f(-0.5f * scale, 0.5f * scale, 0.5f * scale);
+        gl.glEnd();
+
+        // Draw the back face (rectangle)
+        gl.glBegin(GL2.GL_QUADS);
+        gl.glVertex3f(-0.5f * scale, 0.3f * scale, -1.5f * scale);
+        gl.glVertex3f(0.5f * scale, 0.3f * scale, -0.5f * scale);
+        gl.glVertex3f(0.5f * scale, 0.5f * scale, -1.5f * scale);
+        gl.glVertex3f(-0.5f * scale, 0.5f * scale, -1.5f * scale);
+        gl.glEnd();
+
+        // Draw the left face (rectangle)
+        gl.glBegin(GL2.GL_QUADS);
+        gl.glVertex3f(-0.5f * scale, 0.3f * scale, -1.5f * scale);
+        gl.glVertex3f(-0.5f * scale, 0.3f * scale, 0.5f * scale);
+        gl.glVertex3f(-0.5f * scale, 0.5f * scale, 0.5f * scale);
+        gl.glVertex3f(-0.5f * scale, 0.5f * scale, -1.5f * scale);
+        gl.glEnd();
+
+        // Draw the right face (square)
+        gl.glBegin(GL2.GL_QUADS);
+        gl.glVertex3f(0.5f * scale, 0.3f * scale, -1.5f * scale);
+        gl.glVertex3f(0.5f * scale, 0.3f * scale, 0.5f * scale);
+        gl.glVertex3f(0.5f * scale, 0.5f * scale, 0.5f * scale);
+        gl.glVertex3f(0.5f * scale, 0.5f * scale, -1.5f * scale);
+        gl.glEnd();
+
+        // Draw the top face (rectangle)
+        gl.glBegin(GL2.GL_QUADS);
+        gl.glVertex3f(-0.5f * scale, 0.5f * scale, -1.5f * scale);
+        gl.glVertex3f(0.5f * scale, 0.5f * scale, -1.5f * scale);
+        gl.glVertex3f(0.5f * scale, 0.5f * scale, 0.5f * scale);
+        gl.glVertex3f(-0.5f * scale, 0.5f * scale, 0.5f * scale);
+        gl.glEnd();
+
+        // Draw the bottom face (square)
+        gl.glBegin(GL2.GL_QUADS);
+        gl.glVertex3f(-0.5f * scale, 0.3f * scale, -1.5f * scale);
+        gl.glVertex3f(0.5f * scale, 0.3f * scale, -1.5f * scale);
+        gl.glVertex3f(0.5f * scale, 0.3f * scale, 0.5f * scale);
+        gl.glVertex3f(-0.5f * scale, 0.3f * scale, 0.5f * scale);
+        gl.glEnd();
+    }
+
     public static void tetrahedron(GL2 gl, double side, boolean makeTexCoords) {
         gl.glBegin(GL2.GL_TRIANGLES);
         gl.glVertex3f(0.0f, 0.5f, 0.0f);
@@ -328,13 +396,12 @@ public class Shapes {
     }
 
 
-
     public static void rectangularPyramid(GL2 gl, double side, boolean makeTexCoords) {
         gl.glPushMatrix();
         gl.glBegin(GL2.GL_TRIANGLES);           // Begin drawing the pyramid with 4 triangles
         // Front
         gl.glNormal3f(0, 0, 1);
-        gl.glVertex3f( 0.0f, 0.5f, 0.0f);
+        gl.glVertex3f(0.0f, 0.5f, 0.0f);
         gl.glNormal3f(0, 0, -1);
         gl.glVertex3f(-0.5f, -0.5f, 0.5f);
         gl.glNormal3f(0, 0, -1);
@@ -358,11 +425,11 @@ public class Shapes {
 
         // Left
         gl.glNormal3f(0, 0, 1);
-        gl.glVertex3f( 0.0f, 0.5f, 0.0f);
+        gl.glVertex3f(0.0f, 0.5f, 0.0f);
         gl.glNormal3f(0, 0, 1);
-        gl.glVertex3f(-0.5f,-0.5f,-0.5f);
+        gl.glVertex3f(-0.5f, -0.5f, -0.5f);
         gl.glNormal3f(0, 0, -1);
-        gl.glVertex3f(-0.5f,-0.5f, 0.5f);
+        gl.glVertex3f(-0.5f, -0.5f, 0.5f);
         gl.glEnd();
         gl.glPopMatrix();
 
@@ -370,10 +437,10 @@ public class Shapes {
         gl.glPushMatrix();
         gl.glBegin(GL2.GL_QUADS);
 
-        gl.glVertex3f( -0.5f, -0.5f, 0.5f);
-        gl.glVertex3f(0.5f,-0.5f,0.5f);
-        gl.glVertex3f(0.5f,-0.5f, -0.5f);
-        gl.glVertex3f(-0.5f,-0.5f, -0.5f);
+        gl.glVertex3f(-0.5f, -0.5f, 0.5f);
+        gl.glVertex3f(0.5f, -0.5f, 0.5f);
+        gl.glVertex3f(0.5f, -0.5f, -0.5f);
+        gl.glVertex3f(-0.5f, -0.5f, -0.5f);
 
         gl.glEnd();
         gl.glPopMatrix();
@@ -387,7 +454,7 @@ public class Shapes {
         gl.glBegin(GL2.GL_TRIANGLES);
         // 1
         gl.glNormal3f(0, 0, 1);
-        gl.glVertex3f( 0.0f, 0.5f, 0.0f);
+        gl.glVertex3f(0.0f, 0.5f, 0.0f);
         gl.glNormal3f(0, 0, 1);
         gl.glVertex3f(-0.25f, -0.5f, 0.5f);
         gl.glNormal3f(0, 0, -1);
@@ -411,17 +478,17 @@ public class Shapes {
 
         // 4
         gl.glNormal3f(0, 0, 1);
-        gl.glVertex3f( 0.0f, 0.5f, 0.0f);
+        gl.glVertex3f(0.0f, 0.5f, 0.0f);
         gl.glNormal3f(0, 0, 1);
-        gl.glVertex3f(0.0f,-0.5f,-0.5f);
+        gl.glVertex3f(0.0f, -0.5f, -0.5f);
         gl.glNormal3f(0, 0, -1);
-        gl.glVertex3f(-0.5f,-0.5f, -0.25f);
+        gl.glVertex3f(-0.5f, -0.5f, -0.25f);
 
         // 5
         gl.glNormal3f(0, 0, 1);
-        gl.glVertex3f( 0.0f, 0.5f, 0.0f);
+        gl.glVertex3f(0.0f, 0.5f, 0.0f);
         gl.glNormal3f(0, 0, 1);
-        gl.glVertex3f(-0.5f,-0.5f, -0.25f);
+        gl.glVertex3f(-0.5f, -0.5f, -0.25f);
         gl.glNormal3f(0, 0, -1);
         gl.glVertex3f(-0.25f, -0.5f, 0.5f);
 
@@ -448,7 +515,7 @@ public class Shapes {
 
         // 1
         gl.glNormal3f(0, 0, 1.0f);
-        gl.glVertex3f( 0.0f, 0.5f, 0.0f);
+        gl.glVertex3f(0.0f, 0.5f, 0.0f);
         gl.glNormal3f(0, 0, 1.0f);
         gl.glVertex3f(-0.25f, -0.5f, 0.5f);
         gl.glNormal3f(0, 0, -1);
@@ -472,27 +539,27 @@ public class Shapes {
 
         // 4
         gl.glNormal3f(0, 0, 1.0f);
-        gl.glVertex3f( 0.0f, 0.5f, 0.0f);
+        gl.glVertex3f(0.0f, 0.5f, 0.0f);
         gl.glNormal3f(0, 0, 1.0f);
-        gl.glVertex3f(0.25f,-0.5f,-0.5f);
+        gl.glVertex3f(0.25f, -0.5f, -0.5f);
         gl.glNormal3f(0, 0, -1.0f);
-        gl.glVertex3f(-0.25f,-0.5f, -0.5f);
+        gl.glVertex3f(-0.25f, -0.5f, -0.5f);
 
         // 5
         gl.glNormal3f(0, 0, 1);
-        gl.glVertex3f( 0.0f, 0.5f, 0.0f);
+        gl.glVertex3f(0.0f, 0.5f, 0.0f);
         gl.glNormal3f(0, 0, 1);
-        gl.glVertex3f(-0.25f,-0.5f, -0.5f);
+        gl.glVertex3f(-0.25f, -0.5f, -0.5f);
         gl.glNormal3f(0, 0, -1);
         gl.glVertex3f(-0.5f, -0.5f, 0f);
 
         // 6
         gl.glNormal3f(0, 0, 1);
-        gl.glVertex3f( 0.0f, 0.5f, 0.0f);
+        gl.glVertex3f(0.0f, 0.5f, 0.0f);
         gl.glNormal3f(0, 0, 1);
         gl.glVertex3f(-0.5f, -0.5f, 0f);
         gl.glNormal3f(0, 0, -1);
-        gl.glVertex3f(-0.25f,-0.5f, 0.5f);
+        gl.glVertex3f(-0.25f, -0.5f, 0.5f);
 
 
         gl.glEnd();
@@ -501,31 +568,249 @@ public class Shapes {
         gl.glPushMatrix();
         gl.glBegin(GL2.GL_POLYGON);
 
-        gl.glVertex3f(-0.25f,-0.5f, 0.5f);
-        gl.glVertex3f(0.25f,-0.5f, 0.5f);
-        gl.glVertex3f(0.5f,-0.5f, 0.0f);
-        gl.glVertex3f(0.25f,-0.5f, -0.5f);
-        gl.glVertex3f(-0.25f,-0.5f, -0.5f);
-        gl.glVertex3f(-0.5f,-0.5f, 0.0f);
+        gl.glVertex3f(-0.25f, -0.5f, 0.5f);
+        gl.glVertex3f(0.25f, -0.5f, 0.5f);
+        gl.glVertex3f(0.5f, -0.5f, 0.0f);
+        gl.glVertex3f(0.25f, -0.5f, -0.5f);
+        gl.glVertex3f(-0.25f, -0.5f, -0.5f);
+        gl.glVertex3f(-0.5f, -0.5f, 0.0f);
 
         gl.glEnd();
         gl.glPopMatrix();
 
     }
-    private void renderDog(GL2 gl) {
 
-        // Set the color to brown
-        //   gl.glColor3f(0.6f, 0.4f, 0.2f);
+    private static void renderMouseTrap(GL2 gl, int[] angles) {
+        float scale = 1f;
 
-        // Draw the body
+        // Set the color of the mouse trap
+
+        // Draw the base
+        gl.glRotatef(angles[0], 1, 0, 0);
+        gl.glRotatef(angles[1], 0, 1, 0);
+        gl.glRotatef(angles[2], 0, 0, 1);
+
+
+        // Clear The Screen And The Depth Buffe
+
+        // Base of the trap (rectangle)
+        // Base of the trap (3D rectangle)
         gl.glPushMatrix();
-        gl.glBegin(GL2.GL_QUADS);
-        gl.glVertex3f(-0.5f, -0.5f, 0.5f);
-        gl.glVertex3f(0.5f, -0.5f, 0.5f);
-        gl.glVertex3f(0.5f, 0.5f, 0.5f);
-        gl.glVertex3f(-0.5f, 0.5f, 0.5f);
+        gl.glTranslatef(0.0f, -0.45f, 0.0f);
+        gl.glScalef(1.0f, 0.1f, 0.5f); // Scale to make it look like a flat rectangle
+        glut.glutSolidCube(1.0f);
+        gl.glPopMatrix();
+
+        // Spring mechanism (cylinder)
+        GLUquadric quad = glu.gluNewQuadric();
+        gl.glTranslatef(0.0f, -0.35f, 0.0f); // Position the spring on top of the base
+        glu.gluCylinder(quad, 0.05f, 0.05f, 0.2f, 10, 10);
+
+
+        // Cheese platform (small 3D rectangle)
+        gl.glPushMatrix();
+        gl.glTranslatef(0.25f, 0f, 0f); // Position the cheese platform on top of the spring
+        gl.glScalef(0.2f, 0.05f, 0.2f); // Scale to make it look like a small flat rectangle
+        glut.glutSolidCube(1.0f);
+        gl.glPopMatrix();
+
+        //1// Grey color
+        gl.glPushMatrix();
+        gl.glRotatef(1 * 90.0f, 0.0f, 1.0f, 0.0f);
+        gl.glRotatef( 90f, 0f, 0f, 1f); // Rotate to each side
+        gl.glTranslatef(0.0f, 0f, 0.05f); // Position on the edge of the base
+        gl.glScalef(0.01f, 0.4f, 0.01f); // Scale to make it look like a thin tall rectangle
+        glut.glutSolidCube(1.0f); // Draw rectangle
+        gl.glPopMatrix();
+        //2
+        gl.glPushMatrix();
+        gl.glRotatef(2 * 90.0f, 0.0f, 1.0f, 0.0f);
+        gl.glRotatef(70, 0.0f, 0f, -1.0f);// Rotate to each side
+        gl.glTranslatef(0f, 0.25f, 0.2f); // Position on the edge of the base
+        gl.glScalef(0.01f, 0.6f, 0.01f);  // Scale to make it look like a thin tall rectangle
+        glut.glutSolidCube(1.0f); // Draw rectangle
+        gl.glPopMatrix();
+        gl.glPushMatrix();
+
+        //3
+        gl.glRotatef(3 * 90.0f, 0.0f, 1.0f, 0.0f);
+        gl.glRotatef( 90f, 0f, 0f, 1f);
+        // Rotate to each side
+        gl.glTranslatef(0.20f, 0.00f, 0.53f);
+        gl.glScalef(0.01f, 0.4f, 0.01f);
+        glut.glutSolidCube(1.0f); // Draw rectangle
+        gl.glPopMatrix();
+        gl.glPushMatrix();
+
+        //4
+        gl.glRotatef(0, 0f, 1.0f, 0.0f);
+        gl.glRotatef( 70.0f, 0f, 0f, 1f);// Rotate to each side
+        gl.glTranslatef(0f, 0.25f, 0.2f); // Position on the edge of the base
+        gl.glScalef(0.01f, 0.6f, 0.01f); // Scale to make it look like a thin tall rectangle
+        glut.glutSolidCube(1.0f); // Draw rectangle
+        gl.glPopMatrix();
+
+
+    }
+
+    private static void renderCheese(GL2 gl, int[] angles) {
+        float scale = 1f;
+        // Set the color of the cheese (yellowish-orange)
+        //   gl.glColor3f(1.0f, 0.78f, 0.0f);
+
+        gl.glRotatef(angles[0], 1, 0, 0);
+        gl.glRotatef(angles[1], 0, 1, 0);
+        gl.glRotatef(angles[2], 0, 0, 1);
+
+        // Front face
+        gl.glBegin(GL2.GL_TRIANGLES);
+        gl.glVertex3f(-0.5f * scale, -0.5f * scale, 0.5f * scale);
+        gl.glVertex3f(0.5f * scale, -0.5f * scale, 0.5f * scale);
+        gl.glVertex3f(0.0f, 0.5f * scale, 0.5f * scale);
         gl.glEnd();
+
+        // Back face
+        gl.glBegin(GL2.GL_TRIANGLES);
+        gl.glVertex3f(-0.5f * scale, -0.5f * scale, -0.5f * scale);
+        gl.glVertex3f(0.5f * scale, -0.5f * scale, -0.5f * scale);
+        gl.glVertex3f(0.0f, 0.5f * scale, -0.5f * scale);
+        gl.glEnd();
+
+        // Side faces
+        gl.glBegin(GL2.GL_QUADS);
+        // Side 1
+        gl.glVertex3f(-0.5f * scale, -0.5f * scale, 0.5f * scale);
+        gl.glVertex3f(-0.5f * scale, -0.5f * scale, -0.5f * scale);
+        gl.glVertex3f(0.0f, 0.5f * scale, -0.5f * scale);
+        gl.glVertex3f(0.0f, 0.5f * scale, 0.5f * scale);
+        // Side 2
+        gl.glVertex3f(0.5f * scale, -0.5f * scale, 0.5f * scale);
+        gl.glVertex3f(0.5f * scale, -0.5f * scale, -0.5f * scale);
+        gl.glVertex3f(0.0f, 0.5f * scale, -0.5f * scale);
+        gl.glVertex3f(0.0f, 0.5f * scale, 0.5f * scale);
+        gl.glEnd();
+
+        // Side faces with holes
+        //      gl.glColor3f(1.0f, 0.78f, 0.0f); // Color for the holes
+        float radius = 0.25f * scale / 2; // Radius of the holes
+        int numHoles = 6; // Number of holes
+        float angleStep = 360.0f / numHoles;
+        float yPos = -0.25f * scale; // Y position of the holes
+        for (int i = 0; i < numHoles; i++) {
+            float angle = i * angleStep;
+            float xPos = (float) Math.cos(Math.toRadians(angle)) * 0.25f * scale; // X position of the holes
+            float zPos = (float) Math.sin(Math.toRadians(angle)) * 0.25f * scale; // Z position of the holes
+
+            gl.glPushMatrix();
+            gl.glTranslatef(xPos, yPos, zPos);
+            glut.glutSolidSphere(radius, 20, 20);
+            gl.glPopMatrix();
+
+        }
+        for (int i = 0; i < numHoles / 2; i++) {
+            float angle = i * angleStep * 2 + 30;
+            float xPos = (float) Math.cos(Math.toRadians(angle)) * 0.15f * scale; // X position of the holes
+            float zPos = (float) Math.sin(Math.toRadians(angle)) * 0.15f * scale; // Z position of the holes
+
+            gl.glPushMatrix();
+            gl.glTranslatef(xPos, yPos + 0.3f, zPos);
+            glut.glutSolidSphere(radius, 20, 20);
+            gl.glPopMatrix();
+        }
+
+        float xPos = (float) Math.cos(Math.toRadians(0)) * 0f * scale; // X position of the holes
+        float zPos = (float) Math.sin(Math.toRadians(0)) * 0f * scale; // Z position of the holes
+
+        gl.glPushMatrix();
+        gl.glTranslatef(xPos, yPos + 0.5f, zPos);
+        glut.glutSolidSphere(radius, 20, 20);
+
+
         gl.glPopMatrix();
     }
 
+    private static void renderMouse(GL2 gl, int[] angles) {
+        // Draw the body
+        gl.glRotatef(angles[0], 1, 0, 0);
+        gl.glRotatef(angles[1], 0, 1, 0);
+        gl.glRotatef(angles[2], 0, 0, 1);
+
+        gl.glPushMatrix();
+        gl.glTranslatef(0.0f, 0.0f, 0.0f);
+        gl.glScalef(0.5f, 0.25f, 0.25f);
+        glut.glutSolidSphere(1.0, 20, 20);
+        gl.glPopMatrix();
+
+        // Draw the head
+        gl.glPushMatrix();
+        gl.glTranslatef(0.5f, 0.0f, 0.0f);
+        gl.glScalef(0.25f, 0.25f, 0.25f);
+        glut.glutSolidSphere(1.0, 20, 20);
+        gl.glPopMatrix();
+
+        // Draw the tail
+        gl.glPushMatrix();
+        gl.glTranslatef(-0.65f, 0.0f, 0.0f);
+        gl.glScalef(0.2f, 0.05f, 0.05f);
+        glut.glutSolidSphere(1.0, 20, 20);
+        gl.glPopMatrix();
+
+        // Draw the ears
+        gl.glPushMatrix();
+        gl.glTranslatef(0.5f, 0.25f, -0.25f);
+        gl.glScalef(0.1f, 0.1f, 0.1f);
+        glut.glutSolidSphere(1.0, 20, 20);
+        gl.glPopMatrix();
+
+        gl.glPushMatrix();
+        gl.glTranslatef(0.5f, 0.25f, 0.25f);
+        gl.glScalef(0.1f, 0.1f, 0.1f);
+        glut.glutSolidSphere(1.0, 20, 20);
+        gl.glPopMatrix();
+
+        // Draw the tongue
+        gl.glPushMatrix();
+        gl.glTranslatef(0.7f, -0.2f, 0f);
+        gl.glScalef(0.1f, 0.05f, 0.05f);
+        glut.glutSolidSphere(1.0, 20, 20);
+        gl.glPopMatrix();
+
+        // Draw the eyes
+        gl.glPushMatrix();
+        gl.glTranslatef(0.7f, 0.15f, 0.1f);/////
+        gl.glScalef(0.05f, 0.05f, 0.05f);
+        glut.glutSolidSphere(1.0, 20, 20);
+        gl.glPopMatrix();
+
+        gl.glPushMatrix();
+        gl.glTranslatef(0.7f, 0.15f, -0.1f);//////
+        gl.glScalef(0.05f, 0.05f, 0.05f);
+        glut.glutSolidSphere(1.0, 20, 20);
+        gl.glPopMatrix();
+
+        // Draw the legs
+        gl.glPushMatrix();
+        gl.glTranslatef(-0.25f, -0.3f, 0.15f);
+        gl.glScalef(0.05f, 0.3f, 0.05f);
+        glut.glutSolidCube(1.3f);
+        gl.glPopMatrix();
+
+        gl.glPushMatrix();
+        gl.glTranslatef(-0.25f, -0.3f, -0.15f);
+        gl.glScalef(0.05f, 0.3f, 0.05f);
+        glut.glutSolidCube(1.3f);
+        gl.glPopMatrix();
+
+        gl.glPushMatrix();
+        gl.glTranslatef(0.25f, -0.3f, 0.15f);
+        gl.glScalef(0.05f, 0.3f, 0.05f);
+        glut.glutSolidCube(1.3f);
+        gl.glPopMatrix();
+
+        gl.glPushMatrix();
+        gl.glTranslatef(0.25f, -0.3f, -0.15f);
+        gl.glScalef(0.05f, 0.3f, 0.05f);
+        glut.glutSolidCube(1.3f);
+        gl.glPopMatrix();
+    }
 }
